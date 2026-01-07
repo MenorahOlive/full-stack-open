@@ -10,9 +10,9 @@ const Button = ({ onClick, title }) => (
   <button onClick={onClick}>{title}</button>
 );
 
-const Statistic = ({ rating, value }) => (
+const Statistic = ({ type, value }) => (
   <p>
-    {rating} {value}
+    {type} {value}
   </p>
 );
 
@@ -21,10 +21,40 @@ const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [average, setAverage] = useState(0);
+  const [percentage, setPercentage] = useState(0);
 
-  const handleGoodClicks = () => setGood(good + 1);
-  const handleNeutralClicks = () => setNeutral(neutral + 1);
-  const handleBadClicks = () => setBad(bad + 1);
+  const handleGoodClicks = () => {
+    const updatedGood = good + 1;
+    setGood(updatedGood);
+    const updatedTotal = updatedGood + neutral + bad;
+    setTotal(updatedTotal);
+    const calculateAverage = (updatedGood - bad) / updatedTotal;
+    setAverage(calculateAverage);
+    const calculatePercentage = (updatedGood / updatedTotal) * 100;
+    setPercentage(calculatePercentage);
+  };
+  const handleNeutralClicks = () => {
+    const updatedNeutral = neutral + 1;
+    setNeutral(updatedNeutral);
+    const updatedTotal = good + updatedNeutral + bad;
+    setTotal(updatedTotal);
+    const calculateAverage = (good - bad) / updatedTotal;
+    setAverage(calculateAverage);
+    const calculatePercentage = (good / updatedTotal) * 100;
+    setPercentage(calculatePercentage);
+  };
+  const handleBadClicks = () => {
+    const updatedBad = bad + 1;
+    setBad(updatedBad);
+    const updatedTotal = good + neutral + updatedBad;
+    setTotal(updatedTotal);
+    const calculateAverage = (good - updatedBad) / updatedTotal;
+    setAverage(calculateAverage);
+    const calculatePercentage = (good / updatedTotal) * 100;
+    setPercentage(calculatePercentage);
+  };
 
   return (
     <div>
@@ -34,9 +64,12 @@ const App = () => {
       <Button onClick={handleBadClicks} title="bad" />
 
       <Heading title="statistics" />
-      <Statistic rating="good" value={good} />
-      <Statistic rating="neutral" value={neutral} />
-      <Statistic rating="bad" value={bad} />
+      <Statistic type="good" value={good} />
+      <Statistic type="neutral" value={neutral} />
+      <Statistic type="bad" value={bad} />
+      <Statistic type="all" value={total} />
+      <Statistic type="average" value={average} />
+      <Statistic type="positive" value={percentage} />
     </div>
   );
 };
