@@ -9,11 +9,17 @@ const Heading = ({ title }) => (
 const Button = ({ onClick, title }) => (
   <button onClick={onClick}>{title}</button>
 );
+const Statistics = ({ children }) => (
+  <table>
+    <tbody>{children}</tbody>
+  </table>
+);
 
 const StatisticsLine = ({ type, value }) => (
-  <p>
-    {type} {value}
-  </p>
+  <tr>
+    <td>{type}</td>
+    <td>{value}</td>
+  </tr>
 );
 
 const App = () => {
@@ -69,12 +75,14 @@ const App = () => {
         <div>No feedback given</div>
       ) : (
         <>
-          <StatisticsLine type="good" value={good} />
-          <StatisticsLine type="neutral" value={neutral} />
-          <StatisticsLine type="bad" value={bad} />
-          <StatisticsLine type="all" value={total} />
-          <StatisticsLine type="average" value={average} />
-          <StatisticsLine type="positive" value={percentage} />
+          <Statistics>
+            <StatisticsLine type="good" value={good} />
+            <StatisticsLine type="neutral" value={neutral} />
+            <StatisticsLine type="bad" value={bad} />
+            <StatisticsLine type="all" value={total} />
+            <StatisticsLine type="average" value={average} />
+            <StatisticsLine type="positive" value={percentage} />
+          </Statistics>
         </>
       )}
     </div>
