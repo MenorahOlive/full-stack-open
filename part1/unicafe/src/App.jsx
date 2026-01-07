@@ -10,7 +10,7 @@ const Button = ({ onClick, title }) => (
   <button onClick={onClick}>{title}</button>
 );
 
-const Statistics = ({ type, value }) => (
+const StatisticsLine = ({ type, value }) => (
   <p>
     {type} {value}
   </p>
@@ -69,12 +69,12 @@ const App = () => {
         <div>No feedback given</div>
       ) : (
         <>
-          <Statistics type="good" value={good} />
-          <Statistics type="neutral" value={neutral} />
-          <Statistics type="bad" value={bad} />
-          <Statistics type="all" value={total} />
-          <Statistics type="average" value={average} />
-          <Statistics type="positive" value={percentage} />
+          <StatisticsLine type="good" value={good} />
+          <StatisticsLine type="neutral" value={neutral} />
+          <StatisticsLine type="bad" value={bad} />
+          <StatisticsLine type="all" value={total} />
+          <StatisticsLine type="average" value={average} />
+          <StatisticsLine type="positive" value={percentage} />
         </>
       )}
     </div>
