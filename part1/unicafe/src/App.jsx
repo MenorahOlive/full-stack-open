@@ -10,7 +10,7 @@ const Button = ({ onClick, title }) => (
   <button onClick={onClick}>{title}</button>
 );
 
-const Statistic = ({ type, value }) => (
+const Statistics = ({ type, value }) => (
   <p>
     {type} {value}
   </p>
@@ -64,12 +64,12 @@ const App = () => {
       <Button onClick={handleBadClicks} title="bad" />
 
       <Heading title="statistics" />
-      <Statistic type="good" value={good} />
-      <Statistic type="neutral" value={neutral} />
-      <Statistic type="bad" value={bad} />
-      <Statistic type="all" value={total} />
-      <Statistic type="average" value={average} />
-      <Statistic type="positive" value={percentage} />
+      <Statistics type="good" value={good} />
+      <Statistics type="neutral" value={neutral} />
+      <Statistics type="bad" value={bad} />
+      <Statistics type="all" value={total} />
+      <Statistics type="average" value={average} />
+      <Statistics type="positive" value={percentage} />
     </div>
   );
 };
