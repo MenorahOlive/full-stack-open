@@ -64,12 +64,19 @@ const App = () => {
       <Button onClick={handleBadClicks} title="bad" />
 
       <Heading title="statistics" />
-      <Statistics type="good" value={good} />
-      <Statistics type="neutral" value={neutral} />
-      <Statistics type="bad" value={bad} />
-      <Statistics type="all" value={total} />
-      <Statistics type="average" value={average} />
-      <Statistics type="positive" value={percentage} />
+
+      {total === 0 ? (
+        <div>No feedback given</div>
+      ) : (
+        <>
+          <Statistics type="good" value={good} />
+          <Statistics type="neutral" value={neutral} />
+          <Statistics type="bad" value={bad} />
+          <Statistics type="all" value={total} />
+          <Statistics type="average" value={average} />
+          <Statistics type="positive" value={percentage} />
+        </>
+      )}
     </div>
   );
 };
