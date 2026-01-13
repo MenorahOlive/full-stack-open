@@ -1,42 +1,8 @@
 import { useState, useEffect } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 import axios from "axios";
-
-const Filter = ({ newSearch, handleFilter }) => {
-  return (
-    <div>
-      filter shown with
-      <input value={newSearch} onChange={handleFilter} />
-    </div>
-  );
-};
-
-const PersonForm = ({
-  addNumber,
-  newName,
-  newNumber,
-  handleNewName,
-  handleNewNumber,
-}) => {
-  return (
-    <form onSubmit={addNumber}>
-      <div>
-        name: <input value={newName} onChange={handleNewName} /> <br></br>
-        number: <input value={newNumber} onChange={handleNewNumber} />
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-  );
-};
-
-const Persons = ({ namesToShow }) => {
-  return namesToShow.map((person) => (
-    <p key={person.id}>
-      {person.name} {person.number}{" "}
-    </p>
-  ));
-};
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -52,19 +18,29 @@ const App = () => {
 
   const addNumber = (event) => {
     event.preventDefault();
+
     const newNameObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
     };
     console.log(newNameObject);
 
-    persons.some((person) => newName === person.name)
-      ? alert(`${newName} is already added to the phonebook`)
-      : setPersons(persons.concat(newNameObject));
+    const nameExists = persons.some(
+      (person) => person.name.toLowerCase() === newNameObject.name.toLowerCase()
+    );
 
-    setNewName("");
-    setNewNumber("");
+    if (nameExists) {
+      alert(`${newName} is already added to the phonebook`);
+      return;
+    }
+
+    axios
+      .post("http://localhost:3001/persons", newNameObject)
+      .then((response) => {
+        setPersons(persons.concat(response.data));
+        setNewName("");
+        setNewNumber("");
+      });
   };
 
   const handleNewName = (event) => {
