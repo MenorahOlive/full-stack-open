@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import axios from "axios";
+import personService from "./services/person";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,9 +11,7 @@ const App = () => {
   const [newSearch, setNewSearch] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => setPersons(response.data));
+    personService.getAll().then((initialPersons) => setPersons(initialPersons));
   }, []);
 
   const addNumber = (event) => {
@@ -34,13 +32,12 @@ const App = () => {
       return;
     }
 
-    axios
-      .post("http://localhost:3001/persons", newNameObject)
-      .then((response) => {
-        setPersons(persons.concat(response.data));
-        setNewName("");
-        setNewNumber("");
-      });
+    personService.create(newNameObject).then((newPerson) => {
+      console.log(newPerson);
+      setPersons(persons.concat(newPerson));
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   const handleNewName = (event) => {
