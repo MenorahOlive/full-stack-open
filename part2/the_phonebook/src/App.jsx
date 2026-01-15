@@ -52,6 +52,24 @@ const App = () => {
     console.log(event.target.value);
   };
 
+  const handleDelete = (id) => {
+    const person = persons.find((p) => p.id === id);
+
+    if (!window.confirm(`Delete ${person.name}?`)) {
+      return;
+    }
+
+    personService
+      .remove(id)
+      .then(() => {
+        setPersons(persons.filter((p) => p.id !== id));
+      })
+      .catch(() => {
+        alert(`${person.name} is already removed from the server`);
+        setPersons(persons.filter((p) => p.id !== id));
+      });
+  };
+
   const namesToShow =
     newSearch === ""
       ? persons
@@ -61,11 +79,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-
       <Filter newSearch={newSearch} handleFilter={handleFilter} />
-
       <h2>Add a new</h2>
-
       <PersonForm
         addNumber={addNumber}
         newName={newName}
@@ -73,9 +88,8 @@ const App = () => {
         handleNewName={handleNewName}
         handleNewNumber={handleNewNumber}
       />
-
       <h2>Numbers</h2>
-      <Persons namesToShow={namesToShow} />
+      <Persons namesToShow={namesToShow} handleDelete={handleDelete} />
     </div>
   );
 };
