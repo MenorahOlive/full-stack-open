@@ -3,12 +3,14 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personService from "./services/person";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newSearch, setNewSearch] = useState("");
+  const [message, setMessage] = useState("Some message");
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => setPersons(initialPersons));
@@ -44,8 +46,14 @@ const App = () => {
             setPersons(
               persons.map((p) => (p.id === person.id ? returnedPerson : p))
             );
+
             setNewName("");
             setNewNumber("");
+
+            setMessage(
+              `Changed ${changedPerson.name}'s phone number to ${changedPerson.number}`
+            );
+            setTimeout(() => setMessage(null), 5000);
           })
           .catch((error) => {
             alert(
@@ -61,8 +69,14 @@ const App = () => {
     personService.create(newNameObject).then((newPerson) => {
       console.log(newPerson);
       setPersons(persons.concat(newPerson));
+
       setNewName("");
       setNewNumber("");
+
+      setMessage(`Added ${newNameObject.name} Number:${newNameObject.number}`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
     });
   };
 
@@ -89,6 +103,8 @@ const App = () => {
       .remove(id)
       .then(() => {
         setPersons(persons.filter((p) => p.id !== id));
+        setMessage(`Deleted ${person.name} from the server`);
+        setTimeout(() => setMessage(null), 5000);
       })
       .catch(() => {
         alert(`${person.name} is already removed from the server`);
@@ -105,6 +121,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter newSearch={newSearch} handleFilter={handleFilter} />
       <h2>Add a new</h2>
       <PersonForm
