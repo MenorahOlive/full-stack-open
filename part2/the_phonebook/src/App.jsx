@@ -25,10 +25,36 @@ const App = () => {
 
     const nameExists = persons.some(
       (person) => person.name.toLowerCase() === newNameObject.name.toLowerCase()
-    );
+    ); //returns true or false
 
     if (nameExists) {
-      alert(`${newName} is already added to the phonebook`);
+      if (
+        window.confirm(
+          `${newName} is already added to the phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const person = persons.find(
+          (person) =>
+            person.name.toLowerCase() === newNameObject.name.toLowerCase()
+        ); //returns the actual person object
+        const changedPerson = { ...person, number: newNumber };
+        personService
+          .update(person.id, changedPerson)
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((p) => (p.id === person.id ? returnedPerson : p))
+            );
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch((error) => {
+            alert(
+              `Information of ${person.name} has already been removed from server`
+            );
+            setPersons(persons.filter((p) => p.id !== person.id));
+          });
+        return;
+      }
       return;
     }
 
