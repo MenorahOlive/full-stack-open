@@ -20,11 +20,14 @@ const CountryDetails = ({ country }) => {
   );
 };
 
-const CountryList = ({ countries }) => {
+const CountryList = ({ countries, handleShow }) => {
   return (
     <div>
       {countries.map((country) => (
-        <p key={country.name.common}>{country.name.common}</p>
+        <div key={country.name.common}>
+          {country.name.common}
+          <button onClick={() => handleShow(country.name.common)}>show</button>
+        </div>
       ))}
     </div>
   );
@@ -33,6 +36,7 @@ const CountryList = ({ countries }) => {
 const App = () => {
   const [value, setValue] = useState("");
   const [countries, setCountries] = useState([]);
+  const [selected, setSelected] = useState(null);
 
   const handleSearch = (event) => {
     setValue(event.target.value);
@@ -52,15 +56,24 @@ const App = () => {
     country.name.common.toLowerCase().includes(value.toLowerCase())
   );
 
+  const handleShow = (name) => {
+    const findCountry = countries.find(
+      (country) => country.name.common === name
+    );
+    setSelected(findCountry);
+  };
+
   return (
     <>
       find countries <input value={value} onChange={handleSearch} />
-      {value === "" ? null : filteredCountries.length > 10 ? (
+      {value === "" ? null : selected ? (
+        <CountryDetails country={selected} />
+      ) : filteredCountries.length > 10 ? (
         <div>Too many matches, specify another filter</div>
       ) : filteredCountries.length === 1 ? (
         <CountryDetails country={filteredCountries[0]} />
       ) : (
-        <CountryList countries={filteredCountries} />
+        <CountryList countries={filteredCountries} handleShow={handleShow} />
       )}
     </>
   );
