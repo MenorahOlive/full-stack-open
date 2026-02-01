@@ -63,6 +63,16 @@ app.post("/api/persons", (request, response, next) => {
     .catch((error) => next(error));
 });
 
+app.put("/api/persons/:id", (request, response, next) => {
+  Person.findByIdAndUpdate(
+    request.params.id,
+    { number: request.body.number },
+    { new: true, runValidators: true },
+  )
+    .then((person) => response.json(person))
+    .catch((error) => next(error));
+});
+
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
