@@ -28,38 +28,39 @@ const App = () => {
     console.log(newNameObject);
 
     const nameExists = persons.some(
-      (person) => person.name.toLowerCase() === newNameObject.name.toLowerCase()
+      (person) =>
+        person.name.toLowerCase() === newNameObject.name.toLowerCase(),
     ); //returns true or false
 
     if (nameExists) {
       if (
         window.confirm(
-          `${newName} is already added to the phonebook, replace the old number with a new one?`
+          `${newName} is already added to the phonebook, replace the old number with a new one?`,
         )
       ) {
         const person = persons.find(
           (person) =>
-            person.name.toLowerCase() === newNameObject.name.toLowerCase()
+            person.name.toLowerCase() === newNameObject.name.toLowerCase(),
         ); //returns the actual person object
         const changedPerson = { ...person, number: newNumber };
         personService
           .update(person.id, changedPerson)
           .then((returnedPerson) => {
             setPersons(
-              persons.map((p) => (p.id === person.id ? returnedPerson : p))
+              persons.map((p) => (p.id === person.id ? returnedPerson : p)),
             );
 
             setNewName("");
             setNewNumber("");
 
             setMessage(
-              `Changed ${changedPerson.name}'s phone number to ${changedPerson.number}`
+              `Changed ${changedPerson.name}'s phone number to ${changedPerson.number}`,
             );
             setTimeout(() => setMessage(null), 5000);
           })
           .catch((error) => {
             setErrorMessage(
-              `Information of ${person.name} has already been removed from server`
+              `Information of ${person.name} has already been removed from server`,
             );
             setTimeout(() => setErrorMessage(null), 5000);
             setPersons(persons.filter((p) => p.id !== person.id));
@@ -69,18 +70,27 @@ const App = () => {
       return;
     }
 
-    personService.create(newNameObject).then((newPerson) => {
-      console.log(newPerson);
-      setPersons(persons.concat(newPerson));
+    personService
+      .create(newNameObject)
+      .then((newPerson) => {
+        console.log(newPerson);
+        setPersons(persons.concat(newPerson));
 
-      setNewName("");
-      setNewNumber("");
+        setNewName("");
+        setNewNumber("");
 
-      setMessage(`Added ${newNameObject.name} Number:${newNameObject.number}`);
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-    });
+        setMessage(
+          `Added ${newNameObject.name} Number:${newNameObject.number}`,
+        );
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      })
+      .catch((error) => {
+        console.log(error.response.data.error);
+        setErrorMessage(error.response.data.error);
+        setTimeout(() => setErrorMessage(null), 5000);
+      });
   };
 
   const handleNewName = (event) => {
@@ -119,7 +129,7 @@ const App = () => {
     newSearch === ""
       ? persons
       : persons.filter((person) =>
-          person.name.toLowerCase().includes(newSearch.toLowerCase())
+          person.name.toLowerCase().includes(newSearch.toLowerCase()),
         );
   return (
     <div>
