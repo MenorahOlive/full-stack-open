@@ -59,9 +59,7 @@ const App = () => {
             setTimeout(() => setMessage(null), 5000);
           })
           .catch((error) => {
-            setErrorMessage(
-              `Information of ${person.name} has already been removed from server`,
-            );
+            setErrorMessage(error.response.data.error);
             setTimeout(() => setErrorMessage(null), 5000);
             setPersons(persons.filter((p) => p.id !== person.id));
           });

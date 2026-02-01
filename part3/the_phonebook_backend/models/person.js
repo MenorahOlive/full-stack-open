@@ -16,11 +16,16 @@ const personSchema = new mongoose.Schema({
     required: true,
   },
   number: {
-    type: Number,
+    type: String,
     required: true,
+    validate: {
+      validator: (v) => {
+        return /^\d{2}-\d{6}$/.test(v) || /^\d{3}-\d{5}$/.test(v);
+      },
+      message: "Invalid phone number format",
+    },
   },
 });
-
 personSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
